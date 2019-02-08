@@ -1,0 +1,50 @@
+{
+  "name": "react-use-form",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ariesjia/react-use-form.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ariesjia/react-use-form/issues"
+  },
+  "homepage": "https://github.com/ariesjia/react-use-form#readme",
+  "dependencies": {
+    "async-validator": "^1.10.1"
+  },
+  "devDependencies": {
+    "@semantic-release/changelog": "^3.0.1",
+    "@semantic-release/git": "^7.0.5",
+    "@semantic-release/npm": "^5.0.5",
+    "@storybook/addon-actions": "^4.1.11",
+    "@storybook/addon-links": "^4.1.11",
+    "@storybook/addons": "^4.1.11",
+    "@storybook/react": "^4.1.11",
+    "@types/react": "^16.8.1",
+    "babel-loader": "^8.0.5",
+    "callbag-interval": "^1.1.0",
+    "gh-pages": "^2.0.1",
+    "react": "16.8.1",
+    "react-dom": "16.8.1",
+    "rimraf": "^2.6.2",
+    "semantic-release": "^15.10.6",
+    "storybook": "^1.0.0",
+    "ts-loader": "5.3.3",
+    "ts-node": "7.0.1",
+    "typescript": "^3.2.2"
+  },
+  "peerDependencies": {
+    "react": "16.8.1",
+    "react-dom": "16.8.1"
+  }
+}
