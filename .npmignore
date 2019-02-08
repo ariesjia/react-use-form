@@ -1,0 +1,8 @@
+.DS_Store
+node_modules
+TODO.md
+*.log
+.idea
+src
+.babelrc
+.travis.yml
