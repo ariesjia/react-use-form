@@ -111,6 +111,8 @@ const useForm: UseForm = <T>(intial: Partial<T>) => {
           callback && callback()
         }
       })
+    } else {
+      callback && callback()
     }
   }
 

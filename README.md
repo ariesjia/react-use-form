@@ -1,21 +1,22 @@
-import * as React from 'react';
+# react-use-form
+> manage form state use React Hooks.
 
-import { storiesOf } from '@storybook/react';
-import { action } from '@storybook/addon-actions';
-import { linkTo } from '@storybook/addon-links';
-import useForm from '../index';
+## Install
+```bash
+// use yarn
+yarn add react-use-form -D
+// use npm
+npm install react-use-form  --save-dev
+```
 
-interface IForm {
-  name: string
-  password: string,
-}
-
+## Demo
+```javascript
 const Demo = () => {
-  const [form, field]  = useForm<IForm>({
+  const [form, field]  = useForm({
     name: '',
     password: ''
-  });
-
+  })
+  
   const handleSubmit = (event) => {
     event.preventDefault()
     form.validate((errors) => {
@@ -25,10 +26,9 @@ const Demo = () => {
       }
     })
   }
-
+  
   return (
     <div>
-      { JSON.stringify(form.value) }
       <form onSubmit={handleSubmit}>
         <div>
           <label>username</label>
@@ -41,10 +41,6 @@ const Demo = () => {
         <button type='submit'>submit</button>
       </form>
     </div>
-  );
-};
-
-storiesOf('Form', module)
-    .add('demo1', () => (
-        <Demo />
-    ));
+  )
+}
+```
