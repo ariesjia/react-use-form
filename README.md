@@ -1,12 +1,12 @@
-# react-use-form
+# react-useform
 > manage form state use React Hooks.
 
 ## Install
 ```bash
 // use yarn
-yarn add react-use-form -D
+yarn add react-useform -D
 // use npm
-npm install react-use-form  --save-dev
+npm install react-useform  --save-dev
 ```
 
 ## Demo
