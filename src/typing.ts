@@ -1,3 +1,12 @@
+
+interface AnyProperties {
+  [key: string]: any
+}
+
+export type ValidateError = AnyProperties & {
+  message?: string,
+}
+
 export type ValidationRule = {
   /** validation error message */
   message?: React.ReactNode;

@@ -44,3 +44,23 @@ const Demo = () => {
   )
 }
 ```
+
+### form
+
+* `value`: The form data
+* `touched`: The field had been changed by user
+* `errors`: The form validate errors
+* `validate`: The form validate function
+
+### field
+
+```javascript
+field(name, [options])
+```
+
+* `name`: The field field (required).
+
+#### Options
+
+* `rules`: validate rules use [async-validate](https://github.com/freeformsystems/async-validate)
+* `trigger`: Event which is listened to validate

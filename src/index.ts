@@ -3,11 +3,7 @@ import * as AsyncValidator from 'async-validator'
 import { get } from './utils/safe-get'
 import { mapValues } from './utils/map-values'
 import { omit } from './utils/omit'
-import { ValidationRule } from "./typing"
-
-export interface ValidateError {
-  message?: string,
-}
+import { ValidationRule, ValidateError } from "./typing"
 
 export interface FieldOption {
   trigger?: string
