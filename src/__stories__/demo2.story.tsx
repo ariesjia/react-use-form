@@ -1,9 +1,9 @@
-import * as React from 'react';
+import * as React from 'react'
 
-import { storiesOf } from '@storybook/react';
-import { action } from '@storybook/addon-actions';
-import { linkTo } from '@storybook/addon-links';
-import useForm from './index';
+import { storiesOf } from '@storybook/react'
+import { action } from '@storybook/addon-actions'
+import { linkTo } from '@storybook/addon-links'
+import useForm from '../index';
 
 interface IForm {
   name: string
@@ -14,13 +14,15 @@ const Demo = () => {
   const [form, field]  = useForm<IForm>({
     name: '',
     password: ''
-  });
+  })
 
   const handleSubmit = (event) => {
     event.preventDefault()
     form.validate((errors) => {
-      console.log(errors);
-
+      console.log(errors)
+      if(!errors) {
+        alert('submit')
+      }
     })
   }
 
@@ -56,10 +58,10 @@ const Demo = () => {
       </div>
       <button type='submit'>submit</button>
     </form>
-  </div>;
-};
+  </div>
+}
 
 storiesOf('Form', module)
     .add('demo2', () => (
         <Demo />
-    ));
+    ))

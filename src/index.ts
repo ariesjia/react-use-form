@@ -24,7 +24,7 @@ export type UseForm = <T>(initialData: Partial<T>) => [
       [P in keyof T]: boolean
     }
     validate: <K extends keyof T>(
-      callback?: (error: any) => void,
+      callback?: (errors?: ValidateError[]) => void,
       keys?: K[],
     ) => void
   },
@@ -45,9 +45,7 @@ const setField = (state, name, value) => {
   })
 }
 
-// @ts-ignore
 const useForm: UseForm = <T>(intial: Partial<T>) => {
-
   const initialData = intial || {}
   const [state, setState] = useState(
     {
@@ -77,11 +75,12 @@ const useForm: UseForm = <T>(intial: Partial<T>) => {
 
   const handleErrors = (fields, keys, newState) => {
     const errors = Array.isArray(keys) ? keys.reduce((prev, key) => {
-      return fields[key] ? {
+      const fieldsError = fields || {}
+      return fieldsError[key] ? {
         ...prev,
-        [key]: fields[key],
+        [key]: fieldsError[key],
       } : omit(prev, [key])
-    }, newState.errors) : fields
+    }, newState.errors) : fields || {}
     const errorState = {
       ...newState,
       errors
@@ -91,7 +90,7 @@ const useForm: UseForm = <T>(intial: Partial<T>) => {
   }
 
   const innerValidate = <K extends keyof T>(
-    callback?: (error: any) => void,
+    callback?: (errors?: ValidateError[]) => void,
     keys?: K[],
     newState = state
   ) => {
@@ -106,8 +105,10 @@ const useForm: UseForm = <T>(intial: Partial<T>) => {
       const formValue = getFormValue(newState)
       validator.validate(formValue, (errors, fields) => {
         const error = handleErrors(fields, keys, newState)
-        if(errors && callback) {
-          callback(error.errors)
+        if(errors) {
+          callback && callback(error.errors)
+        } else {
+          callback && callback()
         }
       })
     }
@@ -153,7 +154,9 @@ const useForm: UseForm = <T>(intial: Partial<T>) => {
         return getFormValue()
       },
       get errors() {
-        return state.errors
+        return state.errors as {
+          [P in keyof T]: ValidateError[]
+        }
       },
       get touched() {
         return mapValues(state.fields, field => field.touched) as {
