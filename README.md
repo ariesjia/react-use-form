@@ -1,16 +1,18 @@
-# react-useform
+# rc-use-form
 > manage form state use React Hooks.
 
 ## Install
 ```bash
 // use yarn
-yarn add react-useform -D
+yarn add rc-use-form -D
 // use npm
-npm install react-useform  --save-dev
+npm install rc-use-form  --save-dev
 ```
 
 ## Demo
 ```javascript
+import useForm from 'rc-use-form';
+
 const Demo = () => {
   const [form, field]  = useForm({
     name: '',
