@@ -11,6 +11,16 @@ module.exports = {
         include: [
           SRC_PATH,
         ]
+      },
+      {
+        test: /\.story\.tsx?$/,
+        loaders: [
+          {
+            loader: require.resolve('@storybook/addon-storysource/loader'),
+            options: { parser: 'typescript' }
+          }
+        ],
+        enforce: 'pre',
       }
     ]
   },

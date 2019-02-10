@@ -2,7 +2,6 @@ import * as React from 'react'
 
 import { storiesOf } from '@storybook/react'
 import { action } from '@storybook/addon-actions'
-import { linkTo } from '@storybook/addon-links'
 import useForm from '../index';
 
 interface IForm {
@@ -19,9 +18,10 @@ const Demo = () => {
   const handleSubmit = (event) => {
     event.preventDefault()
     form.validate((errors) => {
-      console.log(errors)
       if(!errors) {
-        alert('submit')
+        action('submit')(form.value)
+      } else {
+        action('errors')(errors)
       }
     })
   }
@@ -62,6 +62,6 @@ const Demo = () => {
 }
 
 storiesOf('Form', module)
-    .add('demo2', () => (
+    .add('validate', () => (
         <Demo />
     ))
