@@ -6,3 +6,4 @@ TODO.md
 src
 .babelrc
 .travis.yml
+.storybook

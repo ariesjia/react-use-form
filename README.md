@@ -1,12 +1,12 @@
 # rc-use-form
-> manage form state use React Hooks.
+> manage form state use React Hooks. [https://ariesjia.github.io/rc-use-form/](https://ariesjia.github.io/rc-use-form/)
 
 ## Install
 ```bash
 // use yarn
-yarn add rc-use-form -D
+yarn add rc-use-form
 // use npm
-npm install rc-use-form  --save-dev
+npm install rc-use-form
 ```
 
 ## Demo
@@ -34,7 +34,15 @@ const Demo = () => {
       <form onSubmit={handleSubmit}>
         <div>
           <label>username</label>
-          <input type="text" {...field("name")} />
+          <input type="text" {...field("name", {
+            rules: [{type: "string", required: true}]
+          })}
+          />
+          {
+            form.errors.name && <div>
+                {form.errors.name[0].message}
+            </div>
+          }
         </div>
         <div>
           <label>password</label>
