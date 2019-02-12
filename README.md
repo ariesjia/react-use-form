@@ -1,5 +1,5 @@
 # rc-use-form
-> manage form state use React Hooks. [https://ariesjia.github.io/rc-use-form/](https://ariesjia.github.io/rc-use-form/)
+> manage form state use React Hooks. [https://ariesjia.github.io/react-use-form/](https://ariesjia.github.io/react-use-form/)
 
 ## Install
 ```bash
