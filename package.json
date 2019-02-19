@@ -32,6 +32,7 @@
     "@storybook/addon-storysource": "^4.1.11",
     "@storybook/addons": "^4.1.11",
     "@storybook/react": "^4.1.11",
+    "@types/jest": "^24.0.6",
     "@types/react": "^16.8.0",
     "babel-loader": "^8.0.5",
     "callbag-interval": "^1.1.0",
