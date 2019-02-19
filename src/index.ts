@@ -123,7 +123,7 @@ const useForm: UseForm = <T>(intial: Partial<T>) => {
     })
     return {
       get value() {
-        return get(state, `${name}.value`)
+        return get(state, `fields.${name}.value`)
       },
       onChange(event: Event | any) {
         const value = event.target ? event.target.value : event

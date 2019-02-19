@@ -1,6 +1,8 @@
 # rc-use-form
 > manage form state use React Hooks. [https://ariesjia.github.io/react-use-form/](https://ariesjia.github.io/react-use-form/)
 
+[![Build Status](https://travis-ci.org/ariesjia/react-use-form.svg?branch=master)](https://travis-ci.org/ariesjia/react-use-form)
+
 ## Install
 ```bash
 // use yarn

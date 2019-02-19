@@ -7,3 +7,5 @@ src
 .babelrc
 .travis.yml
 .storybook
+test/unit/coverage/
+test-report.xml

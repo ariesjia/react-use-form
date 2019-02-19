@@ -11,7 +11,7 @@ interface IForm {
 
 const Demo = () => {
   const [form, field]  = useForm<IForm>({
-    name: '',
+    name: 'test name',
     password: ''
   });
 

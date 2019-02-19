@@ -17,7 +17,8 @@ pids
 *.pid.lock
 
 lib-cov
-coverage
+test/unit/coverage/
+test-report.xml
 
 node_modules/
 .yarn-integrity
