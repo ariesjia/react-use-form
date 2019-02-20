@@ -16,7 +16,7 @@
     "noFallthroughCasesInSwitch": true,
     "outDir": "lib",
     "lib": ["es2018", "dom"],
-    "types": ["jest"]
+    "types": ["jest", "node"]
   },
   "exclude": [
     "node_modules",
