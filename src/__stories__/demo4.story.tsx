@@ -52,7 +52,7 @@ const Demo = () => {
         <label>password</label>
         <input type="password" {...field("password", {
           rules: [
-            {type: "string", required: true}
+            {type: "string", required: true, message: 'password required !!!'}
           ]
         })}
         />
