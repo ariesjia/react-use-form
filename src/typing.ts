@@ -1,4 +1,3 @@
-
 interface AnyProperties {
   [key: string]: any
 }

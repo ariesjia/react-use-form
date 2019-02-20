@@ -7,7 +7,7 @@ module.exports = {
     rules: [
       {
         test: /\.tsx?$/,
-        loader: 'ts-loader',
+        loader: ['babel-loader', 'ts-loader'],
         include: [
           SRC_PATH,
         ]

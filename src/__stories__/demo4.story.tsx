@@ -1,5 +1,4 @@
 import * as React from 'react'
-
 import { storiesOf } from '@storybook/react'
 import { action } from '@storybook/addon-actions'
 import useForm from '../index';
@@ -11,7 +10,16 @@ interface IForm {
 
 const Message = () => {
   return (
-    <span>please input username !!!!!!!!!</span>
+    <>
+      <span className="message">please input username !!!!!!!!!</span>
+      <style>{`
+        .message {
+          color: red;
+          margin-bottom: 10px;
+          display: inline-block;
+        }
+      `}</style>
+    </>
   )
 }
 
