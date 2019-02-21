@@ -21,7 +21,38 @@ module.exports = {
           }
         ],
         enforce: 'pre',
-      }
+      },
+      {
+        test: /\.css$/,
+        use: [
+          {
+            loader: 'style-loader',
+          },
+          {
+            loader: 'css-loader',
+            options: {
+              sourceMap: true,
+            },
+          },
+        ],
+      },
+      {
+        test: /\.sass$/,
+        use: [
+          {
+            loader: 'style-loader',
+          },
+          {
+            loader: 'css-loader',
+          },
+          {
+            loader: 'scss-loader',
+            options: {
+              sourceMap: true,
+            },
+          },
+        ],
+      },
     ]
   },
 
