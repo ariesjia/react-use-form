@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {Checkbox, CheckboxGroup} from 'react-checkbox-group';
 
 import {storiesOf} from '@storybook/react';
 import {action} from '@storybook/addon-actions';
@@ -8,6 +9,7 @@ interface IForm {
   name: string
   password: string,
   agree: boolean,
+  multi: string[],
   radio: number,
 }
 
@@ -41,12 +43,20 @@ const Demo = () => {
           <input type="password" {...field("password")} />
         </div>
         <div>
-          <label>checkbox</label>
+          <label>checked</label>
           <input type="checkbox"
                  onChange={() => field("agree").onChange(!field("agree").value)}
                  onBlur={field("agree").onBlur}
                  checked={!!field("agree").value}
           />
+        </div>
+        <div>
+          <label>multi checkbox</label>
+          <CheckboxGroup checkboxDepth={2} name="fruits" {...field("multi")}>
+            <label><Checkbox value="apple"/> Apple</label>
+            <label><Checkbox value="orange"/> Orange</label>
+            <label><Checkbox value="watermelon"/> Watermelon</label>
+          </CheckboxGroup>
         </div>
         <div>
           <label>radio</label>
