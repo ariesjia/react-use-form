@@ -12,6 +12,43 @@ npm install rc-use-form
 ```
 
 ## Demo
+
+### simple 
+
+```javascript
+import useForm from 'rc-use-form';
+
+const Demo = () => {
+  const [form, field]  = useForm({
+    name: '',
+    password: ''
+  })
+  
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    console.log(form.value)
+  }
+  
+  return (
+    <div>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label>username</label>
+          <input type="text" {...field("name")}/>
+        </div>
+        <div>
+          <label>password</label>
+          <input type="password" {...field("password")} />
+        </div>
+        <button type='submit'>submit</button>
+      </form>
+    </div>
+  )
+}
+```
+
+### validate 
+
 ```javascript
 import useForm from 'rc-use-form';
 
@@ -48,7 +85,15 @@ const Demo = () => {
         </div>
         <div>
           <label>password</label>
-          <input type="password" {...field("password")} />
+          <input type="password" {...field("password", {
+            rules: [{type: "string", required: true}]
+          })}
+          />
+          {
+            form.errors.password && <div>
+                {form.errors.password[0].message}
+            </div>
+          }
         </div>
         <button type='submit'>submit</button>
       </form>
