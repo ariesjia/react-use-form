@@ -36,9 +36,9 @@ const Demo = () => {
           <div className="field">
             <label className="label">username</label>
             <input className="input" type="text" {...field("name", {
-              trigger: 'onBlur',
               rules: [
-                {type: "string", required: true}
+                {len: 4,  trigger: 'blur',},
+                {required: true,},
               ]
             })}
             />
@@ -49,9 +49,9 @@ const Demo = () => {
           <div className="field">
             <label className="label">password</label>
             <input className="input" type="password" {...field("password", {
-              trigger: 'onBlur',
               rules: [
-                {type: "string", required: true}
+                {len: 4,  trigger: 'blur',},
+                {required: true,},
               ]
             })}
             />

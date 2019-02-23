@@ -120,4 +120,3 @@ field(name, [options])
 #### Options
 
 * `rules`: validate rules use [async-validate](https://github.com/freeformsystems/async-validate)
-* `trigger`: Event which is listened to validate

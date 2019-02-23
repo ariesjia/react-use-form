@@ -7,6 +7,8 @@ export type ValidateError = AnyProperties & {
 }
 
 export type ValidationRule = {
+  /** validation trigger */
+  trigger?: 'change' | 'blur';
   /** validation error message */
   message?: React.ReactNode;
   /** built-in validation type, available options: https://github.com/yiminghe/async-validator#type */

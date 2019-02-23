@@ -1,12 +1,11 @@
-import { useState } from 'react'
+import {useState} from 'react'
 import * as AsyncValidator from 'async-validator'
-import { get } from './utils/safe-get'
-import { mapValues } from './utils/map-values'
-import { omit } from './utils/omit'
-import { ValidationRule, ValidateError } from "./typing"
+import {get} from './utils/safe-get'
+import {mapValues} from './utils/map-values'
+import {omit} from './utils/omit'
+import {ValidateError, ValidationRule} from "./typing"
 
 export interface FieldOption {
-  trigger?: string
   rules?: ValidationRule[]
 }
 
@@ -88,18 +87,21 @@ const useForm: UseForm = <T>(intial: Partial<T>) => {
   const innerValidate = <K extends keyof T>(
     callback?: (errors?: ValidateError[]) => void,
     keys?: K[],
-    newState = state
+    type?: 'change' | 'blur',
+    newState = state,
   ) => {
+    const isBlur = type === 'blur'
     const descriptor = fieldOptions.reduce((prev, item)=> {
       const rules = get(item, 'option.rules')
       return rules ? Object.assign(prev, {
-        [item.name]: rules
+        [item.name]: rules.filter(rule => type ? (isBlur ? rule.trigger === 'blur' : rule.trigger !== 'blur') : true)
       }) : prev
     }, {})
     if (Object.keys(descriptor).length) {
       const validator = new AsyncValidator(descriptor)
       const formValue = getFormValue(newState)
       validator.validate(formValue, (errors, fields) => {
+        console.log(formValue, errors);
         const error = handleErrors(fields, keys, newState)
         if(errors) {
           callback && callback(error.errors)
@@ -115,8 +117,6 @@ const useForm: UseForm = <T>(intial: Partial<T>) => {
   const getFormValue = (newState = state) => mapValues(newState.fields, field => field.value)
 
   const field = <K extends keyof T>(name: K, option: FieldOption = {}) => {
-    const trigger = option.trigger
-    const isBlurTrigger = (trigger || '').toLowerCase() === 'onblur'
     fieldOptions.push({
       name,
       option
@@ -131,17 +131,13 @@ const useForm: UseForm = <T>(intial: Partial<T>) => {
           value,
           touched: true
         })
-        if(!isBlurTrigger) {
-          innerValidate(() =>{} ,[name], newState)
-        }
+        innerValidate(() =>{} ,[name], 'change', newState, )
       },
       onBlur() {
         const newState = updateField(name, {
           touched: true
         })
-        if(isBlurTrigger) {
-          innerValidate(() =>{}, [name], newState)
-        }
+        innerValidate(() =>{}, [name], 'blur', newState)
       },
     }
   }
