@@ -40,6 +40,14 @@ const setField = (state, name, value) => {
   })
 }
 
+const getValidator = (descriptor) => {
+  if (Object.keys(descriptor).length) {
+    return new AsyncValidator(descriptor)
+  } else {
+    return null
+  }
+}
+
 const useForm: UseForm = <T>(intial: Partial<T>) => {
   const initialData = intial || {}
   const [state, setState] = useState(
@@ -97,11 +105,10 @@ const useForm: UseForm = <T>(intial: Partial<T>) => {
         [item.name]: rules.filter(rule => type ? (isBlur ? rule.trigger === 'blur' : rule.trigger !== 'blur') : true)
       }) : prev
     }, {})
-    if (Object.keys(descriptor).length) {
-      const validator = new AsyncValidator(descriptor)
+    const validator = getValidator(descriptor)
+    if (validator) {
       const formValue = getFormValue(newState)
       validator.validate(formValue, (errors, fields) => {
-        console.log(formValue, errors);
         const error = handleErrors(fields, keys, newState)
         if(errors) {
           callback && callback(error.errors)
