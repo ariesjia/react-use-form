@@ -1,5 +1,6 @@
 import {useState} from 'react'
 import * as AsyncValidator from 'async-validator'
+import * as memoize from 'fast-memoize'
 import {get} from './utils/safe-get'
 import {mapValues} from './utils/map-values'
 import {omit} from './utils/omit'
@@ -40,13 +41,15 @@ const setField = (state, name, value) => {
   })
 }
 
-const getValidator = (descriptor) => {
+// @ts-ignore
+const getValidator = memoize((descriptor) => {
+  console.log(descriptor);
   if (Object.keys(descriptor).length) {
     return new AsyncValidator(descriptor)
   } else {
     return null
   }
-}
+})
 
 const useForm: UseForm = <T>(intial: Partial<T>) => {
   const initialData = intial || {}
