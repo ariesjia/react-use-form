@@ -43,7 +43,6 @@ const setField = (state, name, value) => {
 
 // @ts-ignore
 const getValidator = memoize((descriptor) => {
-  console.log(descriptor);
   if (Object.keys(descriptor).length) {
     return new AsyncValidator(descriptor)
   } else {
