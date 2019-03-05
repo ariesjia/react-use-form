@@ -1,8 +1,8 @@
 import {useState} from 'react'
 import * as AsyncValidator from 'async-validator'
-import * as memoize from 'fast-memoize'
 import {get} from './utils/safe-get'
 import {mapValues} from './utils/map-values'
+import {memoize} from './utils/memoize'
 import {omit} from './utils/omit'
 import {ValidateError, ValidationRule} from "./typing"
 
@@ -41,7 +41,6 @@ const setField = (state, name, value) => {
   })
 }
 
-// @ts-ignore
 const getValidator = memoize((descriptor) => {
   if (Object.keys(descriptor).length) {
     return new AsyncValidator(descriptor)
