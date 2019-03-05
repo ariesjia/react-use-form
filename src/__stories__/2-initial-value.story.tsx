@@ -27,22 +27,28 @@ const Demo = () => {
   return (
     <section className="section">
       <div className="container">
-        <div className="notification">
-          { JSON.stringify(form.value) }
+        <div className="columns">
+          <div className="column is-three-fifths">
+            <form onSubmit={handleSubmit}>
+              <div className="field">
+                <label className="label">text</label>
+                <input className="input" type="text" {...field("name")} />
+              </div>
+              <div className="field">
+                <label className="label">password</label>
+                <input className="input" type="password" {...field("password")} />
+              </div>
+              <div className="field">
+                <button type='submit' className="button is-link">submit</button>
+              </div>
+            </form>
+          </div>
+          <div className="column">
+            <div className="notification" style={{wordBreak: 'break-all'}}>
+              { JSON.stringify(form.value) }
+            </div>
+          </div>
         </div>
-        <form onSubmit={handleSubmit}>
-          <div className="field">
-            <label className="label">text</label>
-            <input className="input" type="text" {...field("name")} />
-          </div>
-          <div className="field">
-            <label className="label">password</label>
-            <input className="input" type="password" {...field("password")} />
-          </div>
-          <div className="field">
-            <button type='submit' className="button is-link">submit</button>
-          </div>
-        </form>
       </div>
     </section>
   );
