@@ -1,5 +1,4 @@
 import * as React from 'react'
-import 'bulma/css/bulma.css'
 import {Checkbox, CheckboxGroup} from 'react-checkbox-group'
 import {storiesOf} from '@storybook/react'
 import {action} from '@storybook/addon-actions'

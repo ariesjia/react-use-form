@@ -1,5 +1,5 @@
 import {useState} from 'react'
-import * as AsyncValidator from 'async-validator'
+import AsyncValidator from 'async-validator'
 import {get} from './utils/safe-get'
 import {mapValues} from './utils/map-values'
 import {memoize} from './utils/memoize'
