@@ -27,11 +27,10 @@ const Demo = () => {
   }
 
   return (
-    <section className="section">
+    <div className="section container">
       <h3 className="title is-3">
         validation
       </h3>
-      <div className="container">
       <form onSubmit={handleSubmit}>
         <div className="field">
           <label className="label">username</label>
@@ -59,12 +58,11 @@ const Demo = () => {
         </div>
         <button type='submit' className='button is-link'>submit</button>
       </form>
-      </div>
-    </section>
+    </div>
   )
 }
 
-storiesOf('Form', module)
+storiesOf('rc-use-form', module)
     .add('validate', () => (
         <Demo />
     ))
