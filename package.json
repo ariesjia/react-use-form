@@ -1,6 +1,6 @@
 {
   "name": "rc-use-form",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "manage form state use React Hooks",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -14,10 +14,17 @@
     "type": "git",
     "url": "git+https://github.com/ariesjia/react-use-form.git"
   },
-  "author": "",
+  "author": "Jia Chen <ariesjia00@hotmail.com>",
   "license": "MIT",
+  "keywords": [
+    "react",
+    "form",
+    "state",
+    "hooks",
+    "react-use"
+  ],
   "bugs": {
-    "url": "https://github.com/ariesjia/rreact-use-form/issues"
+    "url": "https://github.com/ariesjia/react-use-form/issues"
   },
   "homepage": "https://github.com/ariesjia/react-use-form#readme",
   "dependencies": {

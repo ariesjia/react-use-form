@@ -8,7 +8,7 @@ import useForm from '../index'
 
 storiesOf('home', module)
     .add('home', () => (
-        <div className="container">
+        <div className="section container">
           <h1 className="title">rc-use-form</h1>
           <h2 className="subtitle">manage form state use React Hooks. </h2>
           <div className="content">
