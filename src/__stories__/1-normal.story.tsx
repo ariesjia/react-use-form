@@ -10,7 +10,7 @@ interface IForm {
   password: string,
   agree: boolean,
   multi: string[],
-  radio: number,
+  radio?: number,
   textarea: string,
 }
 
@@ -18,8 +18,7 @@ const Demo = () => {
   const [form, field]  = useForm<IForm>({
     name: '',
     password: '',
-    agree: true,
-    radio: 4,
+    agree: false,
     textarea: '123123',
   })
 
@@ -32,11 +31,24 @@ const Demo = () => {
     })
   }
 
+  const handleReset = () => {
+    form.reset()
+    action('reset')()
+  }
+
+  const raido = field("radio", {
+    type: 'radio'
+  })
+
+  const agree = field("agree", {
+    type: 'boolean'
+  })
+
   return (
     <section className="section container">
       <div className="columns">
         <div className="column is-three-fifths">
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} onReset={handleReset}>
             <div className="field">
               <label className="label">text</label>
               <input className="input" type="text" {...field("name")} />
@@ -48,14 +60,14 @@ const Demo = () => {
             <div className="field">
               <label className="label">checked</label>
               <input type="checkbox"
-                     onChange={() => field("agree").onChange(!field("agree").value)}
-                     onBlur={field("agree").onBlur}
-                     checked={!!field("agree").value}
+                     onChange={() => agree.onChange(!agree.value)}
+                     onBlur={agree.onBlur}
+                     checked={!!agree.value}
               />
             </div>
             <div className="field">
               <label className="label">multi checkbox</label>
-              <CheckboxGroup checkboxDepth={2} name="fruits" {...field("multi")}>
+              <CheckboxGroup checkboxDepth={2} name="fruits" {...field("multi", { type: 'checkbox'})}>
                 <label className="checkbox"><Checkbox value="apple"/> Apple</label>
                 <label className="checkbox"><Checkbox value="orange"/> Orange</label>
                 <label className="checkbox"><Checkbox value="watermelon"/> Watermelon</label>
@@ -66,12 +78,13 @@ const Demo = () => {
               <div className="control">
                 {
                   [1,2,3,4,5].map((item) => {
+                    const isChecked = item === raido.value
+                    console.log(isChecked);
                     return (<label key={item} className="radio">
-                      <input name='radio' type="radio" {...field("radio")}
-                             value={item}
-                             onChange={() => field("radio").onChange(item)}
-                             onBlur={field("radio").onBlur}
-                             checked={item === field("radio").value}
+                      <input name='radio' type="radio"
+                             onChange={() => raido.onChange(item)}
+                             onBlur={raido.onBlur}
+                             checked={isChecked}
                       /> {item}
                     </label>)
                   })
@@ -83,7 +96,7 @@ const Demo = () => {
               <textarea className="textarea" {...field("textarea")}></textarea>
             </div>
             <div className="field">
-              <button type="submit" className="button is-link">Submit</button>
+              <button type='submit' className="button is-link">Submit</button> <button type='reset' className="button">Reset</button>
             </div>
           </form>
         </div>

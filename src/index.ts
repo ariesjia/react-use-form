@@ -6,8 +6,17 @@ import {memoize} from './utils/memoize'
 import {omit} from './utils/omit'
 import {ValidateError, ValidationRule} from "./typing"
 
+enum FiledType {
+  text='text',
+  checkbox='checkbox',
+  radio='radio',
+  boolean='boolean',
+}
+
+
 export interface FieldOption {
-  rules?: ValidationRule[]
+  rules?: ValidationRule[],
+  type?: 'text' | 'checkbox' | 'boolean' | 'radio'
 }
 
 export type UseForm = <T>(initialData: Partial<T>) => [
@@ -23,6 +32,7 @@ export type UseForm = <T>(initialData: Partial<T>) => [
       callback?: (errors?: ValidateError[]) => void,
       keys?: K[],
     ) => void
+    reset: (keys?: String[]) => void
   },
   <K extends keyof T>(name: K, option?: FieldOption) => {
     value: T[K]
@@ -48,6 +58,21 @@ const getValidator = memoize((descriptor) => {
     return null
   }
 })
+
+function getResetValue(type) {
+  switch (type) {
+    case FiledType.text:
+      return ''
+    case FiledType.checkbox:
+      return null
+    case FiledType.radio:
+      return null
+    case FiledType.boolean:
+      return false
+    default:
+      return null
+  }
+}
 
 const useForm: UseForm = <T>(intial: Partial<T>) => {
   const initialData = intial || {}
@@ -76,6 +101,11 @@ const useForm: UseForm = <T>(intial: Partial<T>) => {
   }
 
   const fieldOptions: any[] = []
+
+  const getFieldOption = (name) => {
+    const option = fieldOptions.find(option => option.name === name);
+    return option ? option.option : {}
+  }
 
   const handleErrors = (fields, keys, newState) => {
     const errors = Array.isArray(keys) ? keys.reduce((prev, key) => {
@@ -150,6 +180,36 @@ const useForm: UseForm = <T>(intial: Partial<T>) => {
     }
   }
 
+  const reset = (keys?: String[]) => {
+    console.log(state.fields);
+    const fields = state.fields
+    const resetFields = Object.keys(fields).reduce((prev, name) => {
+      const field = fields[name]
+      const option = getFieldOption(name)
+      const shouldReset = keys && keys.length ?  keys.includes(name) :  true
+      return {
+        ...prev,
+        ...(shouldReset && {
+          [name]: {
+            ...field,
+            value: getResetValue(option.type || FiledType.text),
+            error: []
+          }
+        })
+      }
+    }, {})
+
+    const newState = {
+      ...state,
+      fields: {
+        ...fields,
+        ...resetFields
+      }
+    }
+    console.log(newState);
+    setState(newState)
+  }
+
   return [
     {
       get value() {
@@ -170,6 +230,11 @@ const useForm: UseForm = <T>(intial: Partial<T>) => {
         keys?: K[]
       ) {
         return innerValidate(callback, keys)
+      },
+      reset(
+        keys?: String[]
+      ) {
+        reset(keys)
       },
     },
     field,

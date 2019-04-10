@@ -24,11 +24,16 @@ const Demo = () => {
     })
   }
 
+  const handleReset = () => {
+    form.reset()
+    action('reset')()
+  }
+
   return (
     <section className="section container">
       <div className="columns">
         <div className="column is-three-fifths">
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} onReset={handleReset}>
             <div className="field">
               <label className="label">text</label>
               <input className="input" type="text" {...field("name")} />
@@ -38,7 +43,7 @@ const Demo = () => {
               <input className="input" type="password" {...field("password")} />
             </div>
             <div className="field">
-              <button type='submit' className="button is-link">submit</button>
+              <button type='submit' className="button is-link">Submit</button> <button type='reset' className="button">Reset</button>
             </div>
           </form>
         </div>
