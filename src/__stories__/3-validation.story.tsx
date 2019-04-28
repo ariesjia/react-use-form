@@ -26,12 +26,17 @@ const Demo = () => {
     })
   }
 
+  const handleReset = () => {
+    form.reset()
+    action('reset')()
+  }
+
   return (
     <div className="section container">
       <h3 className="title is-3">
         validation
       </h3>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} onReset={handleReset}>
         <div className="field">
           <label className="label">username</label>
           <input className="input" type="text" {...field("name", {
@@ -57,7 +62,13 @@ const Demo = () => {
           }
         </div>
         <button type='submit' className='button is-link'>submit</button>
+        <button type='reset' className="button">reset</button>
       </form>
+      <div className="column">
+        <div className="notification" style={{wordBreak: 'break-all'}}>
+          { JSON.stringify(form) }
+        </div>
+      </div>
     </div>
   )
 }

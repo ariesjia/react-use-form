@@ -1,18 +1,10 @@
-import {useState} from 'react'
+import { useState, useCallback } from 'react'
 import AsyncValidator from 'async-validator'
 import {get} from './utils/safe-get'
 import {mapValues} from './utils/map-values'
-import {memoize} from './utils/memoize'
 import {omit} from './utils/omit'
 import {ValidateError, ValidationRule} from "./typing"
-
-enum FiledType {
-  text='text',
-  checkbox='checkbox',
-  radio='radio',
-  boolean='boolean',
-}
-
+import { actions, reducer } from "./reducer"
 
 export interface FieldOption {
   rules?: ValidationRule[],
@@ -41,108 +33,105 @@ export type UseForm = <T>(initialData: Partial<T>) => [
   }
 ]
 
-const setField = (state, name, value) => {
-  return Object.assign(state, {
-    [name]: {
-      value: get(state, `${name}.value`) || value,
-      touched: false,
-      error: []
-    }
-  })
-}
-
-const getValidator = memoize((descriptor) => {
-  if (Object.keys(descriptor).length) {
-    return new AsyncValidator(descriptor)
-  } else {
-    return null
-  }
-})
-
-function getResetValue(type) {
-  switch (type) {
-    case FiledType.text:
-      return ''
-    case FiledType.checkbox:
-      return null
-    case FiledType.radio:
-      return null
-    case FiledType.boolean:
-      return false
-    default:
-      return null
+const getFieldData = (value) => {
+  return {
+    value: value,
+    touched: false,
   }
 }
 
 const useForm: UseForm = <T>(intial: Partial<T>) => {
   const initialData = intial || {}
-  const [state, setState] = useState(
-    {
-      fields: Object.keys(initialData).reduce((prev, key) => {
-        return setField(prev, key, initialData[key])
-      }, {}),
-      errors: {},
-    }
-  )
 
-  const updateField = (name, data = {}) => {
-    const newState = {
-      ...state,
-      fields: {
-        ...state.fields,
-        [name]: {
-          ...state.fields[name],
-          ...data,
-        },
-      }
-    }
-    setState(newState)
-    return newState
-  }
+  const fieldOptions = {}
 
-  const fieldOptions: any[] = []
-
-  const getFieldOption = (name) => {
-    const option = fieldOptions.find(option => option.name === name);
-    return option ? option.option : {}
-  }
-
-  const handleErrors = (fields, keys, newState) => {
-    const errors = Array.isArray(keys) ? keys.reduce((prev, key) => {
-      const fieldsError = fields || {}
-      return fieldsError[key] ? {
+  const [hooksState, setState] = useState({
+    fields: Object.keys(initialData).reduce((prev, key) => {
+      return {
         ...prev,
-        [key]: fieldsError[key],
-      } : omit(prev, [key])
-    }, newState.errors) : fields || {}
-    const errorState = {
-      ...newState,
-      errors
+        [key]: getFieldData(initialData[key])
+      }
+    }, {}),
+    errors: {},
+    options: {},
+  })
+
+  let state = hooksState
+
+  const dispatch = function(type, payload) {
+    state = reducer(state, {
+      type,
+      payload
+    })
+    setState(state)
+    return state;
+  }
+
+  const setOption = function(name, option?: FieldOption) {
+    if(option) {
+      fieldOptions[name] = option
     }
-    setState(errorState)
-    return errorState
+    return null
+  }
+
+  const getValidateDescriptor = useCallback((type) => {
+    const options = fieldOptions
+    const isBlur = type === 'blur'
+    return Object.keys(options).reduce((prev, key) => {
+      let option = options[key];
+      const rules = option.rules
+      return rules ? Object.assign(prev, {
+        [key]: rules.filter(rule => type ? (isBlur ? rule.trigger === 'blur' : rule.trigger !== 'blur') : true)
+      }) : prev
+    }, {})
+  }, [fieldOptions])
+
+  const getValidator = useCallback((descriptor) => {
+    if (Object.keys(descriptor).length) {
+      return new AsyncValidator(descriptor)
+    } else {
+      return null
+    }
+  }, [fieldOptions])
+
+  const getFormValueFromState = (formState = state) => mapValues(formState.fields, field => field.value)
+
+  const updateField = function(name, data = {}) {
+    return dispatch(actions.UPDATE_FIELD, {
+      name,
+      data
+    })
+  }
+
+  const reset = (keys?: String[]) => {
+    dispatch(actions.RESET, {
+      keys,
+      fieldOptions
+    })
+  }
+
+  const handleErrors = (fieldsError, keys) => {
+    const { errors } = dispatch(actions.SET_ERRORS, {
+      keys,
+      fieldsError
+    })
+    return errors
   }
 
   const innerValidate = <K extends keyof T>(
-    callback?: (errors?: ValidateError[]) => void,
+    callback?: (errors?) => void,
     keys?: K[],
     type?: 'change' | 'blur',
-    newState = state,
+    formState = state,
   ) => {
-    const isBlur = type === 'blur'
-    const descriptor = fieldOptions.reduce((prev, item)=> {
-      const rules = get(item, 'option.rules')
-      return rules ? Object.assign(prev, {
-        [item.name]: rules.filter(rule => type ? (isBlur ? rule.trigger === 'blur' : rule.trigger !== 'blur') : true)
-      }) : prev
-    }, {})
+    const descriptor = getValidateDescriptor(type)
     const validator = getValidator(descriptor)
     if (validator) {
-      const formValue = getFormValue(newState)
-      validator.validate(formValue, (errors, fields) => {
-        const error = handleErrors(fields, keys, newState)
+      const formValue = getFormValueFromState(formState)
+      validator.validate(formValue, (errors, fieldsError) => {
+        const formErrors = handleErrors(fieldsError, keys)
         if(errors) {
-          callback && callback(error.errors)
+          callback && callback(formErrors)
         } else {
           callback && callback()
         }
@@ -152,13 +141,8 @@ const useForm: UseForm = <T>(intial: Partial<T>) => {
     }
   }
 
-  const getFormValue = (newState = state) => mapValues(newState.fields, field => field.value)
-
-  const field = <K extends keyof T>(name: K, option: FieldOption = {}) => {
-    fieldOptions.push({
-      name,
-      option
-    })
+  const field = <K extends keyof T>(name: K, option?: FieldOption) => {
+    setOption(name, option)
     return {
       get value() {
         return get(state, `fields.${name}.value`)
@@ -169,7 +153,7 @@ const useForm: UseForm = <T>(intial: Partial<T>) => {
           value,
           touched: true
         })
-        innerValidate(() =>{} ,[name], 'change', newState, )
+        innerValidate(() =>{} ,[name], 'change', newState)
       },
       onBlur() {
         const newState = updateField(name, {
@@ -180,40 +164,10 @@ const useForm: UseForm = <T>(intial: Partial<T>) => {
     }
   }
 
-  const reset = (keys?: String[]) => {
-    console.log(state.fields);
-    const fields = state.fields
-    const resetFields = Object.keys(fields).reduce((prev, name) => {
-      const field = fields[name]
-      const option = getFieldOption(name)
-      const shouldReset = keys && keys.length ?  keys.includes(name) :  true
-      return {
-        ...prev,
-        ...(shouldReset && {
-          [name]: {
-            ...field,
-            value: getResetValue(option.type || FiledType.text),
-            error: []
-          }
-        })
-      }
-    }, {})
-
-    const newState = {
-      ...state,
-      fields: {
-        ...fields,
-        ...resetFields
-      }
-    }
-    console.log(newState);
-    setState(newState)
-  }
-
   return [
     {
       get value() {
-        return getFormValue()
+        return getFormValueFromState()
       },
       get errors() {
         return state.errors as {
