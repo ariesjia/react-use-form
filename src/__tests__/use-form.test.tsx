@@ -42,6 +42,4 @@ describe("use-form test", () => {
     userEvent.type(input, text)
     expect(value.textContent).toEqual(text)
   })
-
-
 })

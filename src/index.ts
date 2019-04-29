@@ -2,7 +2,6 @@ import { useState, useCallback } from 'react'
 import AsyncValidator from 'async-validator'
 import {get} from './utils/safe-get'
 import {mapValues} from './utils/map-values'
-import {omit} from './utils/omit'
 import {ValidateError, ValidationRule} from "./typing"
 import { actions, reducer } from "./reducer"
 
@@ -20,11 +19,11 @@ export type UseForm = <T>(initialData: Partial<T>) => [
     touched: {
       [P in keyof T]: boolean
     }
-    validate: <K extends keyof T>(
+    validate: (
       callback?: (errors?: ValidateError[]) => void,
-      keys?: K[],
+      keys?: (keyof T)[],
     ) => void
-    reset: (keys?: String[]) => void
+    reset: (keys?: (keyof T)[]) => void
   },
   <K extends keyof T>(name: K, option?: FieldOption) => {
     value: T[K]
@@ -103,7 +102,7 @@ const useForm: UseForm = <T>(intial: Partial<T>) => {
     })
   }
 
-  const reset = (keys?: String[]) => {
+  const reset = (keys?: (keyof T)[]) => {
     dispatch(actions.RESET, {
       keys,
       fieldOptions
@@ -118,9 +117,9 @@ const useForm: UseForm = <T>(intial: Partial<T>) => {
     return errors
   }
 
-  const innerValidate = <K extends keyof T>(
+  const innerValidate = (
     callback?: (errors?) => void,
-    keys?: K[],
+    keys?: (keyof T)[],
     type?: 'change' | 'blur',
     formState = state,
   ) => {
@@ -179,14 +178,14 @@ const useForm: UseForm = <T>(intial: Partial<T>) => {
           [P in keyof T]: boolean
         }
       },
-      validate<K extends keyof T>(
+      validate(
         callback?: (error: any) => void,
-        keys?: K[]
+        keys?: (keyof T)[]
       ) {
         return innerValidate(callback, keys)
       },
       reset(
-        keys?: String[]
+        keys?: (keyof T)[]
       ) {
         reset(keys)
       },
