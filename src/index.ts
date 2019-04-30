@@ -4,7 +4,7 @@ import {get} from './utils/safe-get'
 import {mapValues} from './utils/map-values'
 import {memoize} from "./utils/memoize";
 import {ValidateError, ValidationRule} from "./typing"
-import { actions, reducer } from "./reducer"
+import {actions, reducer} from "./reducer"
 
 export interface FieldOption {
   rules?: ValidationRule[],

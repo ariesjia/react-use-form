@@ -1,11 +1,5 @@
 import {omit} from "./utils/omit";
-
-export enum FiledType {
-  text='text',
-  checkbox='checkbox',
-  radio='radio',
-  boolean='boolean',
-}
+import {FiledType} from "./filed-type";
 
 function getResetValue(type) {
   switch (type) {
