@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react'
 import AsyncValidator from 'async-validator'
 import {get} from './utils/safe-get'
 import {mapValues} from './utils/map-values'
+import {memoize} from "./utils/memoize";
 import {ValidateError, ValidationRule} from "./typing"
 import { actions, reducer } from "./reducer"
 
@@ -38,6 +39,14 @@ const getFieldData = (value) => {
     touched: false,
   }
 }
+
+const getValidator = memoize((descriptor) => {
+  if (Object.keys(descriptor).length) {
+    return new AsyncValidator(descriptor)
+  } else {
+    return null
+  }
+})
 
 const useForm: UseForm = <T>(intial: Partial<T>) => {
   const initialData = intial || {}
@@ -83,14 +92,6 @@ const useForm: UseForm = <T>(intial: Partial<T>) => {
         [key]: rules.filter(rule => type ? (isBlur ? rule.trigger === 'blur' : rule.trigger !== 'blur') : true)
       }) : prev
     }, {})
-  }, [fieldOptions])
-
-  const getValidator = useCallback((descriptor) => {
-    if (Object.keys(descriptor).length) {
-      return new AsyncValidator(descriptor)
-    } else {
-      return null
-    }
   }, [fieldOptions])
 
   const getFormValueFromState = (formState = state) => mapValues(formState.fields, field => field.value)
