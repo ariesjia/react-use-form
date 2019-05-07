@@ -21,7 +21,6 @@ function FormComponent() {
   )
 }
 
-
 describe("use-form test", () => {
   beforeEach(() => {
     jest.resetModules()

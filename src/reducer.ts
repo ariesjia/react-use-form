@@ -1,19 +1,6 @@
 import {omit} from "./utils/omit";
 import {FiledType} from "./filed-type";
-
-function getResetValue(type) {
-  switch (type) {
-    case FiledType.text:
-      return ''
-    case FiledType.checkbox:
-    case FiledType.radio:
-      return null
-    case FiledType.boolean:
-      return false
-    default:
-      return null
-  }
-}
+import { getResetValue } from "./index";
 
 export const actions = {
   UPDATE_FIELD: 'UPDATE_FIELD',

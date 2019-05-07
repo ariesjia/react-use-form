@@ -1,6 +1,6 @@
 {
   "name": "rc-use-form",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "manage form state use React Hooks",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -48,6 +48,7 @@
     "callbag-interval": "^1.1.0",
     "css-loader": "^2.1.0",
     "gh-pages": "^2.0.1",
+    "hooks-test-util": "^0.0.2",
     "jest": "^24.1.0",
     "react": "^16.8.0",
     "react-checkbox-group": "^4.0.1",

@@ -109,6 +109,7 @@ const Demo = () => {
 * `touched`: The field had been changed by user
 * `errors`: The form validate errors
 * `validate`: The form validate function
+* `getValue`: The form getValue function, always return current value
 
 ### field
 

@@ -5,6 +5,7 @@ import {mapValues} from './utils/map-values'
 import {memoize} from "./utils/memoize";
 import {ValidateError, ValidationRule} from "./typing"
 import {actions, reducer} from "./reducer"
+import {FiledType} from "./filed-type"
 
 export interface FieldOption {
   rules?: ValidationRule[],
@@ -25,6 +26,7 @@ export type UseForm = <T>(initialData: Partial<T>) => [
       keys?: (keyof T)[],
     ) => void
     reset: (keys?: (keyof T)[]) => void
+    getValue: () => Partial<T>,
   },
   <K extends keyof T>(name: K, option?: FieldOption) => {
     value: T[K]
@@ -37,6 +39,20 @@ const getFieldData = (value) => {
   return {
     value: value,
     touched: false,
+  }
+}
+
+export function getResetValue(type) {
+  switch (type) {
+    case FiledType.text:
+      return ''
+    case FiledType.checkbox:
+    case FiledType.radio:
+      return null
+    case FiledType.boolean:
+      return false
+    default:
+      return null
   }
 }
 
@@ -141,11 +157,12 @@ const useForm: UseForm = <T>(intial: Partial<T>) => {
     }
   }
 
-  const field = <K extends keyof T>(name: K, option?: FieldOption) => {
+  const field = <K extends keyof T>(name: K, option: FieldOption = {}) => {
     setOption(name, option)
     return {
       get value() {
-        return get(state, `fields.${name}.value`)
+        const value = get(state, `fields.${name}.value`)
+        return value === undefined  ? getResetValue(option.type) : value
       },
       onChange(event: Event | any) {
         const value = event.target ? event.target.value : event
@@ -178,6 +195,9 @@ const useForm: UseForm = <T>(intial: Partial<T>) => {
         return mapValues(state.fields, field => field.touched) as {
           [P in keyof T]: boolean
         }
+      },
+      getValue() {
+        return getFormValueFromState()
       },
       validate(
         callback?: (error: any) => void,
