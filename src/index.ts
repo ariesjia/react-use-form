@@ -2,7 +2,6 @@ import { useState, useCallback } from 'react'
 import AsyncValidator from 'async-validator'
 import {get} from './utils/safe-get'
 import {mapValues} from './utils/map-values'
-import {memoize} from "./utils/memoize";
 import {ValidateError, ValidationRule} from "./typing"
 import {actions, reducer} from "./reducer"
 import {FiledType} from "./filed-type"
@@ -56,13 +55,13 @@ export function getResetValue(type) {
   }
 }
 
-const getValidator = memoize((descriptor) => {
+const getValidator = (descriptor) => {
   if (Object.keys(descriptor).length) {
     return new AsyncValidator(descriptor)
   } else {
     return null
   }
-})
+}
 
 const useForm: UseForm = <T>(intial: Partial<T>) => {
   const initialData = intial || {}
