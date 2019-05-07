@@ -40,4 +40,40 @@ describe("use-form getValue test", () => {
       name: 'hello'
     })
   })
+
+  it('should get current value in custom validator', function () {
+    const initialData = {
+      name: 'test username',
+      password: 'test password',
+      apassword: 'test password',
+    }
+
+    const { container } = render(() => {
+      return useForm(initialData)
+    })
+
+
+    let password
+    const text = 'yayayayaya'
+
+    container.hook[1]("apassword", {
+      rules: [{
+        type: "string",
+        validator: (rule, value, callback)=>{
+          password = container.hook[0].getValue().password
+          if(value != password){
+            callback("两次输入的密码不一致！")
+          }
+          callback();
+        }
+      }]
+    })
+
+    act(() => {
+      const field = container.hook[1]
+      field('password').onChange(text)
+    })
+
+    expect(password).toEqual(text)
+  })
 })
