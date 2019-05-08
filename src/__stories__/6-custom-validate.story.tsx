@@ -83,7 +83,11 @@ const Demo = () => {
               }
             </div>
             <div className="field">
-              <button type='submit' className="button is-link">Submit</button> <button type='reset' className="button">Reset</button>
+              <button type='submit' className="button is-link">Submit</button>
+              <button type='button' className="button is-link"
+                      onClick={() => { field('apassword').value = 'password'}}
+              >Set Password</button>
+              <button type='reset' className="button">Reset</button>
             </div>
           </form>
         </div>

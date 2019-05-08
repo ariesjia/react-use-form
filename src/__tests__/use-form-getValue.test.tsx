@@ -52,11 +52,13 @@ describe("use-form getValue test", () => {
       return useForm(initialData)
     })
 
+    console.warn = jest.fn()
 
     let password
     const text = 'yayayayaya'
+    const field = container.hook[1]
 
-    container.hook[1]("apassword", {
+    field("apassword", {
       rules: [{
         type: "string",
         validator: (rule, value, callback)=>{
@@ -70,10 +72,13 @@ describe("use-form getValue test", () => {
     })
 
     act(() => {
-      const field = container.hook[1]
-      field('password').onChange(text)
+      container.hook[1]('password').onChange(text)
     })
 
     expect(password).toEqual(text)
+
+    expect(container.hook[0].errors).toEqual( {
+      "apassword": [{"field": "apassword", "message": "两次输入的密码不一致！"}]
+    })
   })
 })

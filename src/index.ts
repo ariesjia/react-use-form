@@ -1,7 +1,8 @@
-import { useState, useCallback } from 'react'
+import {useCallback, useState} from 'react'
 import AsyncValidator from 'async-validator'
 import {get} from './utils/safe-get'
 import {mapValues} from './utils/map-values'
+import noop from './utils/noop'
 import {ValidateError, ValidationRule} from "./typing"
 import {actions, reducer} from "./reducer"
 import {FiledType} from "./filed-type"
@@ -130,6 +131,7 @@ const useForm: UseForm = <T>(intial: Partial<T>) => {
       keys,
       fieldsError
     })
+    console.log(errors, keys, fieldsError);
     return errors
   }
 
@@ -163,19 +165,22 @@ const useForm: UseForm = <T>(intial: Partial<T>) => {
         const value = get(state, `fields.${name}.value`)
         return value === undefined  ? getResetValue(option.type) : value
       },
-      onChange(event: Event | any) {
+      set value(value) {
+        this.onChange(value)
+      },
+      onChange (event: Event | any) {
         const value = event.target ? event.target.value : event
         const newState = updateField(name, {
           value,
           touched: true
         })
-        innerValidate(() =>{} ,[name], 'change', newState)
+        innerValidate(noop, undefined, 'change', newState)
       },
       onBlur() {
         const newState = updateField(name, {
           touched: true
         })
-        innerValidate(() =>{}, [name], 'blur', newState)
+        innerValidate(noop, [name], 'blur', newState)
       },
     }
   }

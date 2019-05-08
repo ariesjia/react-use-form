@@ -42,5 +42,4 @@ describe("use-form reset test", () => {
       name: ''
     })
   })
-
 })
