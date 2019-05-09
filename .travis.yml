@@ -4,6 +4,7 @@ node_js:
 
 before_script:
   - 'yarn build'
+  - 'yarn build-storybook'
 
 deploy:
   provider: pages
