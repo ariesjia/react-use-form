@@ -8,7 +8,8 @@
     "build": "tsc",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "test": "jest --config test/unit/jest.conf.js"
+    "test": "jest --config test/unit/jest.conf.js",
+    "commit": "npx git-cz"
   },
   "repository": {
     "type": "git",

@@ -6,6 +6,9 @@ before_script:
   - 'yarn build'
   - 'yarn build-storybook'
 
+after_success:
+  - 'npx codecov'
+
 deploy:
   provider: pages
   local_dir: './storybook-static'
