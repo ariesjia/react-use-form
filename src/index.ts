@@ -56,14 +56,6 @@ export function getResetValue(type) {
   }
 }
 
-const getValidator = (descriptor) => {
-  if (Object.keys(descriptor).length) {
-    return new AsyncValidator(descriptor)
-  } else {
-    return null
-  }
-}
-
 const useForm: UseForm = <T>(intial: Partial<T>) => {
   const initialData = intial || {}
 
@@ -79,6 +71,8 @@ const useForm: UseForm = <T>(intial: Partial<T>) => {
     errors: {},
     options: {},
   })
+
+  // const fieldOptions = fieldOptionsRef.current
 
   let state = hooksState
 
@@ -110,6 +104,15 @@ const useForm: UseForm = <T>(intial: Partial<T>) => {
     }, {})
   }, [fieldOptions])
 
+  const getValidator = useCallback((descriptor) => {
+      if (Object.keys(descriptor).length) {
+        return new AsyncValidator(descriptor)
+      } else {
+        return null
+      }
+    }
+  , [fieldOptions])
+
   const getFormValueFromState = (formState = state) => mapValues(formState.fields, field => field.value)
 
   const updateField = function(name, data = {}) {
@@ -131,7 +134,6 @@ const useForm: UseForm = <T>(intial: Partial<T>) => {
       keys,
       fieldsError
     })
-    console.log(errors, keys, fieldsError);
     return errors
   }
 
@@ -174,6 +176,7 @@ const useForm: UseForm = <T>(intial: Partial<T>) => {
           value,
           touched: true
         })
+        //#TODO: remove other key error, only add current error
         innerValidate(noop, undefined, 'change', newState)
       },
       onBlur() {
