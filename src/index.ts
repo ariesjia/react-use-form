@@ -176,8 +176,7 @@ const useForm: UseForm = <T>(intial: Partial<T>) => {
           value,
           touched: true
         })
-        //#TODO: remove other key error, only add current error
-        innerValidate(noop, undefined, 'change', newState)
+        innerValidate(noop, [name], 'change', newState)
       },
       onBlur() {
         const newState = updateField(name, {
