@@ -1,5 +1,5 @@
 import * as React from "react";
-import render, { act } from 'hooks-test-util'
+import render, {act} from 'hooks-test-util'
 import useForm from '../index'
 
 describe("use-form getValue test", () => {
@@ -54,15 +54,13 @@ describe("use-form getValue test", () => {
 
     console.warn = jest.fn()
 
-    let password
-    const text = 'yayayayaya'
     const field = container.hook[1]
 
     field("apassword", {
       rules: [{
         type: "string",
         validator: (rule, value, callback)=>{
-          password = container.hook[0].getValue().password
+          const password = container.hook[0].getValue().password
           if(value != password){
             callback("两次输入的密码不一致！")
           }
@@ -72,10 +70,8 @@ describe("use-form getValue test", () => {
     })
 
     act(() => {
-      container.hook[1]('password').onChange(text)
+      container.hook[1]('apassword').onChange('yayayayaya')
     })
-
-    expect(password).toEqual(text)
 
     expect(container.hook[0].errors).toEqual( {
       "apassword": [{"field": "apassword", "message": "两次输入的密码不一致！"}]

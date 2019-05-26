@@ -5,11 +5,11 @@ import {mapValues} from './utils/map-values'
 import noop from './utils/noop'
 import {ValidateError, ValidationRule} from "./typing"
 import {actions, reducer} from "./reducer"
-import {FiledType} from "./filed-type"
+import { FiledType } from "./filed-type"
 
 export interface FieldOption {
   rules?: ValidationRule[],
-  type?: 'text' | 'checkbox' | 'boolean' | 'radio'
+  type?: FiledType
 }
 
 export type UseForm = <T>(initialData: Partial<T>) => [
@@ -42,7 +42,7 @@ const getFieldData = (value) => {
   }
 }
 
-export function getResetValue(type) {
+export function getResetValue(type?: FiledType) {
   switch (type) {
     case FiledType.text:
       return ''
@@ -89,7 +89,6 @@ const useForm: UseForm = <T>(intial: Partial<T>) => {
     if(option) {
       fieldOptions[name] = option
     }
-    return null
   }
 
   const getValidateDescriptor = useCallback((type) => {
@@ -160,12 +159,12 @@ const useForm: UseForm = <T>(intial: Partial<T>) => {
     }
   }
 
-  const field = <K extends keyof T>(name: K, option: FieldOption = {}) => {
+  const field = <K extends keyof T>(name: K, option?: FieldOption) => {
     setOption(name, option)
     return {
       get value() {
         const value = get(state, `fields.${name}.value`)
-        return value === undefined  ? getResetValue(option.type) : value
+        return value === undefined  ? getResetValue(option && option.type) : value
       },
       set value(value) {
         this.onChange(value)
