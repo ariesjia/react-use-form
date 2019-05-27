@@ -9,7 +9,7 @@ import { FiledType } from "./filed-type"
 
 export interface FieldOption {
   rules?: ValidationRule[],
-  type?: FiledType
+  type?: 'text' | 'checkbox' | 'boolean' | 'radio'
 }
 
 export type UseForm = <T>(initialData: Partial<T>) => [
@@ -42,7 +42,7 @@ const getFieldData = (value) => {
   }
 }
 
-export function getResetValue(type?: FiledType) {
+export function getResetValue(type?: string) {
   switch (type) {
     case FiledType.text:
       return ''
