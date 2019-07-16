@@ -61,6 +61,8 @@ const useForm: UseForm = <T>(intial: Partial<T>) => {
 
   const fieldOptions = {}
 
+  const fields = {}
+
   const [hooksState, setState] = useState({
     fields: Object.keys(initialData).reduce((prev, key) => {
       return {
@@ -71,8 +73,6 @@ const useForm: UseForm = <T>(intial: Partial<T>) => {
     errors: {},
     options: {},
   })
-
-  // const fieldOptions = fieldOptionsRef.current
 
   let state = hooksState
 
@@ -161,29 +161,32 @@ const useForm: UseForm = <T>(intial: Partial<T>) => {
 
   const field = <K extends keyof T>(name: K, option?: FieldOption) => {
     setOption(name, option)
-    return {
-      get value() {
-        const value = get(state, `fields.${name}.value`)
-        return value === undefined  ? getResetValue(option && option.type) : value
-      },
-      set value(value) {
-        this.onChange(value)
-      },
-      onChange (event: Event | any) {
-        const value = event.target ? event.target.value : event
-        const newState = updateField(name, {
-          value,
-          touched: true
-        })
-        innerValidate(noop, [name], 'change', newState)
-      },
-      onBlur() {
-        const newState = updateField(name, {
-          touched: true
-        })
-        innerValidate(noop, [name], 'blur', newState)
-      },
+    if(!fields[name as string]) {
+      fields[name as string] = {
+        get value() {
+          const value = get(state, `fields.${name}.value`)
+          return value === undefined  ? getResetValue(option && option.type) : value
+        },
+        set value(value) {
+          this.onChange(value)
+        },
+        onChange (event: Event | any) {
+          const value = event.target ? event.target.value : event
+          const newState = updateField(name, {
+            value,
+            touched: true
+          })
+          innerValidate(noop, [name], 'change', newState)
+        },
+        onBlur() {
+          const newState = updateField(name, {
+            touched: true
+          })
+          innerValidate(noop, [name], 'blur', newState)
+        },
+      }
     }
+    return fields[name as string]
   }
 
   return [
