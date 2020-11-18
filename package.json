@@ -59,7 +59,7 @@
     "react-testing-library": "^5.9.0",
     "rimraf": "^2.6.2",
     "scss-loader": "^0.0.1",
-    "semantic-release": "^15.10.6",
+    "semantic-release": "^17.2.3",
     "storybook": "^1.0.0",
     "style-loader": "^0.23.1",
     "styled-jsx": "^3.2.1",
